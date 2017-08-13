@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Super Sprinter 3000</title>
+    </head>
+    <body>
+        <h1>User Story Manager</h1>
+        <p><a href="/story"><button>Add new User Story</button></a></p>
+        <table border='1' cellspacing='5' cellpadding='5' width="90%" align="center">
+            <tr>
+                <th> ID </th>
+                <th> Story Title </th>
+                <th> User Story </th>
+                <th> Acceptance Criteria </th>
+                <th> Business Value </th>
+                <th> Estimation </th>
+                <th> Status </th>
+            </tr>
+            {% for row in story %}
+            <tr>
+                {% for element in row %}
+                    <td width=''>{{ element }}</td>
+                {% endfor %}
+                <td width="30px"><a href="story/{{ row[0] }}"><img src="https://imageog.flaticon.com/icons/png/512/60/60785.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF" style="width:28px;height:15px;"></img></a></td>
+                <td width="30px"><a href="story/delete/{{ row[0] }}"><img src="http://www.freeiconspng.com/uploads/garbage-bin-png-1.png" style="width:28px;height:28px;"></img></a></td>
+            </tr>
+            {% endfor %}
+
+
+    </body>
+</html>
