@@ -16,15 +16,21 @@
                 <th> Business Value </th>
                 <th> Estimation </th>
                 <th> Status </th>
+                <th> Edit </th>
+                <th> Delete </th>
             </tr>
             {% for row in story %}
+            {% if not row[-1] %}
             <tr>
                 {% for element in row %}
+                {% if element %}
                     <td width=''>{{ element }}</td>
+                {% endif %}
                 {% endfor %}
-                <td width="30px"><a href="story/{{ row[0] }}"><img src="https://imageog.flaticon.com/icons/png/512/60/60785.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF" style="width:28px;height:15px;"></img></a></td>
-                <td width="30px"><a href="story/delete/{{ row[0] }}"><img src="http://www.freeiconspng.com/uploads/garbage-bin-png-1.png" style="width:28px;height:28px;"></img></a></td>
+                <td width="30px"><a href="story/{{ row[0] }}"><img src="/static/edit.png" style="width:28px;height:15px;"></img></a></td>
+                <td width="30px"><a href="story/delete/{{ row[0] }}"><img src="/static/bin.png" style="width:28px;height:28px;" align=center></img></a></td>
             </tr>
+            {% endif %}
             {% endfor %}
 
 

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, session
+from flask import Flask, render_template, redirect, request
 import csv
 
 app = Flask(__name__)
@@ -11,6 +11,8 @@ def read_story_from_csv():
             reader = csv.reader(csv_file, delimiter=',')
             story = []
             for row in reader:
+                if row[-1] == "False":
+                    row[-1] = ''
                 story.append(row)
     except FileNotFoundError:
         story = []
@@ -24,17 +26,6 @@ def route_index():
     if request.method == 'GET':
         story = read_story_from_csv()
         return render_template('list.html', story=story)
-
-
-def route_delete(story_id):
-    if request.method == 'POST':
-        story = read_story_from_csv()
-        with open("data.csv", "w", newline='') as csv_file:
-            writer = csv.writer(csv_file, delimiter=',')
-            for row in story:
-                if row[0] != story_id:
-                    writer.writerow(row)
-    return redirect('/')
 
 
 @app.route('/story', methods=['GET', 'POST'])
@@ -51,7 +42,7 @@ def route_new_story():
         business_value = request.form.get("business_value")
         estimation = request.form.get("estimation")
         status = request.form.get("select")
-        user_story = [story_id, title, description, criteria, business_value, estimation, status]
+        user_story = [story_id, title, description, criteria, business_value, estimation, status, "True"]
         story.append(user_story)
         with open("data.csv", "w", newline='') as csv_file:
             writer = csv.writer(csv_file)
@@ -79,6 +70,7 @@ def route_edit(story_id):
                 row[4] = request.form.get("business_value")
                 row[5] = request.form.get("estimation")
                 row[6] = request.form.get("select")
+                row.extend("False")
                 with open("data.csv", "w", newline='') as csv_file:
                     writer = csv.writer(csv_file)
                     for line in story:
@@ -92,13 +84,13 @@ def route_delete(story_id):
     with open("data.csv", "w", newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         for row in story:
-            if row[0] != story_id:
-                writer.writerow(row)
+            if row[0] == story_id:
+                row[7] = True
+            writer.writerow(row)
     return redirect('/')
 
 
 if __name__ == "__main__":
-    app.secret_key = 'try2'
     app.run(
         debug=True,
         port=5000
