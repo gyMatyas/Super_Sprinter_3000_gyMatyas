@@ -12,7 +12,7 @@ def read_story_from_csv():
             story = []
             for row in reader:
                 if row[-1] == "False":
-                    row[-1] = ''
+                    row[-1] = False
                 story.append(row)
     except FileNotFoundError:
         story = []
@@ -42,7 +42,7 @@ def route_new_story():
         business_value = request.form.get("business_value")
         estimation = request.form.get("estimation")
         status = request.form.get("select")
-        user_story = [story_id, title, description, criteria, business_value, estimation, status, "True"]
+        user_story = [story_id, title, description, criteria, business_value, estimation, status, False]
         story.append(user_story)
         with open("data.csv", "w", newline='') as csv_file:
             writer = csv.writer(csv_file)
@@ -70,10 +70,11 @@ def route_edit(story_id):
                 row[4] = request.form.get("business_value")
                 row[5] = request.form.get("estimation")
                 row[6] = request.form.get("select")
-                row.extend("False")
                 with open("data.csv", "w", newline='') as csv_file:
                     writer = csv.writer(csv_file)
                     for line in story:
+                        if line[7] == "":
+                            line[7] = False
                         writer.writerow(line)
                 return redirect('/')
 
